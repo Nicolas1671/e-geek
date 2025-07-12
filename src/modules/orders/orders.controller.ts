@@ -6,7 +6,7 @@ export class OrdersController {
   constructor(private ordersService: OrdersService) {}
 
   @Get()
-  getOrders(): string[] {
-    return ['Order1', 'Order2', 'Order3'];
+  getOrders() {
+    return this.ordersService.getOrders();
   }
 }
