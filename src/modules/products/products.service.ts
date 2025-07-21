@@ -7,4 +7,16 @@ export class ProductsService {
   getProducts() {
     return this.productsRepository.getProducts();
   }
+  getProductById() {
+    throw new Error('Method not implemented.');
+  }
+  deleteProduct() {
+    throw new Error('Method not implemented.');
+  }
+  updateProduct() {
+    throw new Error('Method not implemented.');
+  }
+  createProduct() {
+    throw new Error('Method not implemented.');
+  }
 }
