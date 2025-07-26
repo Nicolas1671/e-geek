@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UsersRepository } from './users.repository';
 import { User } from './user.interface';
+import { credentials } from '../auth/auth.interface';
 
 @Injectable()
 export class UsersService {
@@ -23,5 +24,8 @@ export class UsersService {
   }
   createUser(user: Omit<User, 'id'>): Promise<User> {
     return this.usersRepository.createUser(user);
+  }
+  findByCredentials(credentials: credentials) {
+    return this.usersRepository.findByCredentials(credentials);
   }
 }

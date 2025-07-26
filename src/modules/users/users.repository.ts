@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { User } from './user.interface';
+import { credentials } from '../auth/auth.interface';
 
 @Injectable()
 export class UsersRepository {
@@ -55,5 +56,10 @@ export class UsersRepository {
       return this.users[index];
     }
     throw new Error('User not found');
+  }
+  // eslint-disable-next-line @typescript-eslint/require-await
+  async findByCredentials(credentials: credentials) {
+    console.log(credentials);
+    throw new Error('Method not implemented.');
   }
 }

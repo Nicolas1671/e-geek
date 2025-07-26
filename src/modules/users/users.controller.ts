@@ -18,6 +18,7 @@ import { User } from './user.interface';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { DateAdderInterceptor } from 'src/interceptors/date-adder.interceptor';
 import { Request } from 'express';
+import { credentials } from '../auth/auth.interface';
 
 @Controller('users')
 //@UseGuards(AuthGuard) // Apply the AuthGuard to all routes in this controller
@@ -52,6 +53,13 @@ export class UsersController {
   ) {
     console.log(request.now);
     return this.usersService.createUser(user);
+  }
+
+  @HttpCode(200)
+  @Post('login')
+  @UseGuards(AuthGuard)
+  findByCredentials(@Body() credentials: credentials) {
+    return this.usersService.findByCredentials(credentials);
   }
 
   @HttpCode(200)

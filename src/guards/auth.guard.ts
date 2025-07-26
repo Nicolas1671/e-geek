@@ -3,8 +3,8 @@ import { Observable } from 'rxjs';
 import { Request } from 'express';
 
 function validateRequest(request: Request) {
-  const token = request.headers['token'];
-  return token === 'valid-token';
+  const authorization = request.headers['authorization'];
+  return authorization === 'Basic <email>:<password>';
 }
 
 @Injectable()
