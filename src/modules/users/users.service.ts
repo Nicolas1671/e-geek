@@ -2,6 +2,20 @@ import { Injectable } from '@nestjs/common';
 import { UsersRepository } from './users.repository';
 import { User } from './user.interface';
 import { credentials } from '../auth/auth.interface';
+//import { InjectRepository } from '@nestjs/typeorm';
+//import { Users } from 'src/entities/users.entity';
+//import { Repository } from 'typeorm';
+
+/* @Injectable()
+export class UsersService {
+  constructor(
+    @InjectRepository(Users) private usersRepository: Repository<Users>,
+  ) {}
+
+  saveUser(user: Users): Promise<Users> {
+    return this.usersRepository.save(user);
+  }
+} */
 
 @Injectable()
 export class UsersService {

@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { User } from './user.interface';
 import { credentials } from '../auth/auth.interface';
+import { DataSource } from 'typeorm';
+import { Users } from 'src/entities/users.entity';
 
 @Injectable()
 export class UsersRepository {
@@ -27,10 +29,10 @@ export class UsersRepository {
       password: '123456',
     },
   ];
+  constructor(private dataSource: DataSource) {}
 
-  // eslint-disable-next-line @typescript-eslint/require-await
   async getUsers() {
-    return this.users;
+    return this.dataSource.getRepository(Users).find();
   }
   // eslint-disable-next-line @typescript-eslint/require-await
   async getUserById(id: number): Promise<User | undefined> {
@@ -47,7 +49,6 @@ export class UsersRepository {
     const newUser = { id, ...user };
     return newUser;
   }
-
   // eslint-disable-next-line @typescript-eslint/require-await
   async updateUser(id: string, user: User) {
     const index = this.users.findIndex((u) => u.id === Number(id));

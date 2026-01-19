@@ -3,11 +3,11 @@ import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { LoggerMiddleware } from 'src/middlewares/logger.middleware';
 import { UsersRepository } from './users.repository';
-/* import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { Users } from 'src/entities/users.entity';
- */
+
 @Module({
-  imports: [],
+  imports: [TypeOrmModule.forFeature([Users])],
   controllers: [UsersController],
   providers: [
     { provide: UsersService, useClass: UsersService },
