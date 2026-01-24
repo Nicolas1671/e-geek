@@ -12,13 +12,20 @@ import {
   Req,
   UseGuards,
   UseInterceptors,
+  ParseUUIDPipe,
+  UsePipes,
+  ValidationPipe,
+  NotFoundException,
+  //HttpException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { User } from './user.interface';
+//import { User } from './user.interface';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { DateAdderInterceptor } from 'src/interceptors/date-adder.interceptor';
 import { Request } from 'express';
 import { credentials } from '../auth/auth.interface';
+import { CreateUserDto } from './dtos/CreateUser.dto';
+import { Users } from 'src/entities/users.entity';
 
 @Controller('users')
 //@UseGuards(AuthGuard) // Apply the AuthGuard to all routes in this controller
@@ -36,19 +43,19 @@ export class UsersController {
     if (!users) {
       throw new Error('Users not found');
     }
-    const usersWithoutPassword = users.map((user) => {
+    /* const usersWithoutPassword = users.map((user) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...userWithoutPassword } = user;
       return userWithoutPassword;
-    });
-    return usersWithoutPassword;
+    }); */
+    return users;
   }
 
   @HttpCode(201)
   @Post()
   @UseInterceptors(DateAdderInterceptor)
   createUser(
-    @Body() user: Omit<User, 'id'>,
+    @Body() user: Omit<CreateUserDto, 'id'>,
     @Req() request: Request & { now: string },
   ) {
     console.log(request.now);
@@ -65,8 +72,8 @@ export class UsersController {
   @HttpCode(200)
   @Put(':id')
   updateUser(
-    @Param('id') id: string,
-    @Body() user: User,
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() user: Users,
     @Headers('token') token?: string,
   ) {
     console.log(token);
@@ -75,20 +82,21 @@ export class UsersController {
 
   @HttpCode(200)
   @Delete(':id')
-  deleteUser() {
-    return this.usersService.deleteUser();
+  @UsePipes(new ValidationPipe({ transform: true }))
+  deleteUser(@Param('id') id: number) {
+    return this.usersService.deleteUser(id);
   }
 
   @HttpCode(200)
   @Get(':id')
-  async getUserById(@Param('id') id: string) {
-    const user = await this.usersService.getUserById(Number(id));
+  async getUserById(@Param('id', ParseUUIDPipe) id: string) {
+    const user = await this.usersService.getUserById(id);
     if (!user) {
-      throw new Error('User not found');
+      throw new NotFoundException('User not found');
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...userWithoutPassword } = user;
-    return userWithoutPassword;
+    /* const { password, ...userWithoutPassword } = user;
+    return userWithoutPassword; */
+    return user;
   }
 }
 
@@ -105,3 +113,15 @@ getRequest(@Req() request: Request) {
   return 'Hello, this is a message from the UsersController!',
 }
  */
+
+/* try {
+  throw new Error('This is a sample error');
+} catch (error) {
+  throw new HttpException(
+    {
+      status: 500,
+      error: 'This is a sample error',
+    },
+    500
+  )  
+} */

@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { User } from './user.interface';
+//import { User } from './user.interface';
 import { credentials } from '../auth/auth.interface';
 import { DataSource } from 'typeorm';
 import { Users } from 'src/entities/users.entity';
+import { CreateUserDto } from './dtos/CreateUser.dto';
 
 @Injectable()
 export class UsersRepository {
-  private users: User[] = [
+  /*   private users: User[] = [
     {
       id: 1,
       name: 'Nicolas',
@@ -28,35 +29,30 @@ export class UsersRepository {
       state: 'available',
       password: '123456',
     },
-  ];
+  ];*/
   constructor(private dataSource: DataSource) {}
 
   async getUsers() {
     return this.dataSource.getRepository(Users).find();
   }
-  // eslint-disable-next-line @typescript-eslint/require-await
-  async getUserById(id: number): Promise<User | undefined> {
-    return this.users.find((user) => user.id === id);
+  async getUserById(id: string): Promise<Users | null> {
+    return this.dataSource.getRepository(Users).findOne({ where: { id } });
   }
-  // eslint-disable-next-line @typescript-eslint/require-await
-  async getUserByName(name: string): Promise<User | undefined> {
-    return this.users.find((user) => user.name === name);
+  async getUserByName(name: string): Promise<Users | null> {
+    return this.dataSource.getRepository(Users).findOne({ where: { name } });
   }
-  // eslint-disable-next-line @typescript-eslint/require-await
-  async createUser(user: Omit<User, 'id'>) {
-    const id = this.users.length + 1;
-    this.users = [...this.users, { id, ...user }];
-    const newUser = { id, ...user };
-    return newUser;
+  async createUser(user: Omit<CreateUserDto, 'id'>) {
+    return this.dataSource.getRepository(Users).save(user);
   }
-  // eslint-disable-next-line @typescript-eslint/require-await
-  async updateUser(id: string, user: User) {
-    const index = this.users.findIndex((u) => u.id === Number(id));
-    if (index !== -1) {
-      this.users[index] = { ...this.users[index], ...user };
-      return this.users[index];
+  async updateUser(id: string, user: Users) {
+    const userToUpdate = await this.dataSource
+      .getRepository(Users)
+      .findOne({ where: { id } });
+    if (!userToUpdate) {
+      throw new Error('User not found');
     }
-    throw new Error('User not found');
+    const index = userToUpdate.id;
+    return this.dataSource.getRepository(Users).update(index, user);
   }
   // eslint-disable-next-line @typescript-eslint/require-await
   async findByCredentials(credentials: credentials) {

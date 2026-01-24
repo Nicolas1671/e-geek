@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { UsersRepository } from './users.repository';
-import { User } from './user.interface';
+//import { User } from './user.interface';
 import { credentials } from '../auth/auth.interface';
+import { CreateUserDto } from './dtos/CreateUser.dto';
+import { Users } from 'src/entities/users.entity';
 //import { InjectRepository } from '@nestjs/typeorm';
 //import { Users } from 'src/entities/users.entity';
 //import { Repository } from 'typeorm';
@@ -27,16 +29,16 @@ export class UsersService {
   getUserByName(name: string) {
     return this.usersRepository.getUserByName(name);
   }
-  getUserById(id: number) {
+  getUserById(id: string) {
     return this.usersRepository.getUserById(id);
   }
-  deleteUser() {
-    throw new Error('Method not implemented.');
+  deleteUser(id: number) {
+    return id;
   }
-  updateUser(id: string, user: User) {
+  updateUser(id: string, user: Users) {
     return this.usersRepository.updateUser(id, user);
   }
-  createUser(user: Omit<User, 'id'>): Promise<User> {
+  createUser(user: Omit<CreateUserDto, 'id'>): Promise<Users> {
     return this.usersRepository.createUser(user);
   }
   findByCredentials(credentials: credentials) {
