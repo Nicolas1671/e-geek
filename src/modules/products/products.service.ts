@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ProductsRepository } from './products.repository';
+import { Products } from 'src/entities/products.entity';
 
 @Injectable()
 export class ProductsService {
@@ -7,8 +8,8 @@ export class ProductsService {
   getProducts() {
     return this.productsRepository.getProducts();
   }
-  getProductById() {
-    throw new Error('Method not implemented.');
+  getProductById(id: number) {
+    return this.productsRepository.getProductById(id);
   }
   deleteProduct() {
     throw new Error('Method not implemented.');
@@ -16,7 +17,7 @@ export class ProductsService {
   updateProduct() {
     throw new Error('Method not implemented.');
   }
-  createProduct() {
-    throw new Error('Method not implemented.');
+  createProduct(product: Omit<Products, 'id'>) {
+    return this.productsRepository.createProduct(product);
   }
 }

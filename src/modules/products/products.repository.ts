@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { Products } from 'src/entities/products.entity';
+import { DataSource } from 'typeorm';
 
 @Injectable()
 export class ProductsRepository {
-  private products = [
+  constructor(private dataSource: DataSource) {}
+  /*   private products = [
+
     {
       name: 'Product1',
       price: 100,
@@ -18,10 +22,22 @@ export class ProductsRepository {
       price: 300,
       description: 'Description of Product3',
     },
-  ];
+  ];*/
 
-  // eslint-disable-next-line @typescript-eslint/require-await
   async getProducts() {
-    return this.products;
+    return this.dataSource.getRepository(Products).find({
+      relations: ['files'],
+    });
+  }
+
+  async createProduct(product: Omit<Products, 'id'>): Promise<Products> {
+    return this.dataSource.getRepository(Products).save(product);
+  }
+
+  async getProductById(id: number): Promise<Products | null> {
+    return this.dataSource.getRepository(Products).findOne({
+      where: { id },
+      relations: ['files'],
+    });
   }
 }

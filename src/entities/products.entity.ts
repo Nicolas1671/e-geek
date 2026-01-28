@@ -10,6 +10,7 @@ import {
 import { Favoritos } from './favoritos.entity';
 import { Orders } from './orders.entity';
 import { Categories } from './categories.entity';
+import { Files } from './files.entity';
 
 @Entity('products', { schema: 'public' })
 export class Products {
@@ -40,4 +41,7 @@ export class Products {
   @ManyToOne(() => Categories, (categories) => categories.products)
   @JoinColumn([{ name: 'categoryId', referencedColumnName: 'id' }])
   category: Categories;
+
+  @OneToMany(() => Files, (files) => files.product)
+  files: Files[];
 }

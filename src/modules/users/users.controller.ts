@@ -16,6 +16,10 @@ import {
   UsePipes,
   ValidationPipe,
   NotFoundException,
+  UploadedFile,
+  FileTypeValidator,
+  MaxFileSizeValidator,
+  ParseFilePipe,
   //HttpException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -26,11 +30,17 @@ import { Request } from 'express';
 import { credentials } from '../auth/auth.interface';
 import { CreateUserDto } from './dtos/CreateUser.dto';
 import { Users } from 'src/entities/users.entity';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { MinSizeValidationPipe } from 'src/pipes/min-size-validator.pipe';
 
 @Controller('users')
 //@UseGuards(AuthGuard) // Apply the AuthGuard to all routes in this controller
 export class UsersController {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private cloudinaryService: CloudinaryService,
+  ) {}
 
   @HttpCode(200)
   @Get()
@@ -97,6 +107,28 @@ export class UsersController {
     /* const { password, ...userWithoutPassword } = user;
     return userWithoutPassword; */
     return user;
+  }
+
+  @Post('profile/image')
+  @UseInterceptors(FileInterceptor('image'))
+  @UsePipes(MinSizeValidationPipe)
+  async getUserImage(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new FileTypeValidator({
+            fileType: /(jpg|jpeg|png|gif)$/,
+          }),
+          new MaxFileSizeValidator({
+            maxSize: 5 * 1024 * 1024,
+            message: 'File too large',
+          }), // 5MB
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+  ) {
+    return this.cloudinaryService.uploadImage(file);
   }
 }
 
