@@ -6,10 +6,14 @@ import { credentials } from './auth.interface';
 import { UsersRepository } from '../users/users.repository';
 import { CreateUserDto } from '../users/dtos/CreateUser.dto';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthRepository {
-  constructor(private usersRepository: UsersRepository) {}
+  constructor(
+    private usersRepository: UsersRepository,
+    private readonly jwtService: JwtService,
+  ) {}
   async signIn(credentials: credentials) {
     const user = await this.usersRepository.findByEmail(credentials.email);
     if (!user) {
@@ -22,7 +26,9 @@ export class AuthRepository {
     if (!isPasswordValid) {
       throw new BadRequestException('Invalid email or password');
     }
-    return { message: 'Sign-in successful' };
+    const payload = { sub: user.id, email: user.email };
+    const token = this.jwtService.sign(payload);
+    return { message: 'Sign-in successful', token };
   }
   async signUp(CreateUserDto: CreateUserDto) {
     const user = await this.usersRepository.findByEmail(CreateUserDto.email);

@@ -45,7 +45,10 @@ export class UsersController {
   @HttpCode(200)
   @Get()
   @UseGuards(AuthGuard)
-  async getUsers(@Query('name') name?: string) {
+  async getUsers(
+    @Req() request: Request & { user?: any },
+    @Query('name') name?: string,
+  ) {
     if (name) {
       return this.usersService.getUserByName(name);
     }
@@ -58,6 +61,7 @@ export class UsersController {
       const { password, ...userWithoutPassword } = user;
       return userWithoutPassword;
     }); */
+    console.log(request.user);
     return users;
   }
 
@@ -66,7 +70,7 @@ export class UsersController {
   @UseInterceptors(DateAdderInterceptor)
   createUser(
     @Body() user: Omit<CreateUserDto, 'id'>,
-    @Req() request: Request & { now: string },
+    @Req() request: Request & { now: string; user?: any },
   ) {
     console.log(request.now);
     return this.usersService.createUser(user);

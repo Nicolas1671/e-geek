@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { typeOrmConfig } from './config/typeorm';
 import { AuthModule } from './modules/auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
 //import { DateAdderInterceptor } from './interceptors/date-adder.interceptor';
 //import { APP_INTERCEPTOR } from '@nestjs/core';
 //import { AuthGuard } from './guards/auth.guard';
@@ -28,6 +29,11 @@ import { AuthModule } from './modules/auth/auth.module';
     UsersModule,
     ProductsModule,
     OrdersModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '1h' },
+      global: true,
+    }),
   ],
   controllers: [],
   providers: [
