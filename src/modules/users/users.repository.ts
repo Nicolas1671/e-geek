@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { credentials } from '../auth/auth.interface';
 import { DataSource } from 'typeorm';
 import { Users } from 'src/entities/users.entity';
+import { Credentials } from 'src/entities/credentials.entity';
 import { CreateUserDto } from './dtos/CreateUser.dto';
 
 @Injectable()
@@ -42,7 +43,20 @@ export class UsersRepository {
     return this.dataSource.getRepository(Users).findOne({ where: { name } });
   }
   async createUser(user: Omit<CreateUserDto, 'id'>) {
-    return this.dataSource.getRepository(Users).save(user);
+    const { password, ...userData } = user;
+    return await this.dataSource.transaction(async (manager) => {
+      const newCredential = await manager.getRepository(Credentials).save({
+        password,
+      });
+      const newUser = await manager.getRepository(Users).save({
+        ...userData,
+        credential: newCredential,
+      });
+      return newUser;
+    });
+  }
+  deleteUser(id: number) {
+    return id;
   }
   async updateUser(id: string, user: Users) {
     const userToUpdate = await this.dataSource
@@ -54,9 +68,16 @@ export class UsersRepository {
     const index = userToUpdate.id;
     return this.dataSource.getRepository(Users).update(index, user);
   }
-  // eslint-disable-next-line @typescript-eslint/require-await
   async findByCredentials(credentials: credentials) {
-    console.log(credentials);
-    throw new Error('Method not implemented.');
+    return this.dataSource.getRepository(Credentials).findOne({
+      where: { users: { email: credentials.email } },
+      relations: { users: true },
+    });
+  }
+  async findByEmail(email: string) {
+    return this.dataSource.getRepository(Users).findOne({
+      where: { email },
+      relations: { credential: true },
+    });
   }
 }

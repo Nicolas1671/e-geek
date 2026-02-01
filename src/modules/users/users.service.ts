@@ -33,7 +33,7 @@ export class UsersService {
     return this.usersRepository.getUserById(id);
   }
   deleteUser(id: number) {
-    return id;
+    return this.usersRepository.deleteUser(id);
   }
   updateUser(id: string, user: Users) {
     return this.usersRepository.updateUser(id, user);

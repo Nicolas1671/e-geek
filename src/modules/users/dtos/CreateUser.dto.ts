@@ -38,5 +38,5 @@ export class CreateUserDto {
     message:
       'La contraseña debe contener al menos una minúscula, una mayúscula, un número y un carácter especial (!@#$%^&*)',
   })
-  password: string;
+  password!: string;
 }

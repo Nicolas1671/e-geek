@@ -5,6 +5,7 @@ import { OrdersModule } from './modules/orders/orders.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { typeOrmConfig } from './config/typeorm';
+import { AuthModule } from './modules/auth/auth.module';
 //import { DateAdderInterceptor } from './interceptors/date-adder.interceptor';
 //import { APP_INTERCEPTOR } from '@nestjs/core';
 //import { AuthGuard } from './guards/auth.guard';
@@ -23,6 +24,7 @@ import { typeOrmConfig } from './config/typeorm';
         return typeOrmConfig;
       },
     }),
+    AuthModule,
     UsersModule,
     ProductsModule,
     OrdersModule,
