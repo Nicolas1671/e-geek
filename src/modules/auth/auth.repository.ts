@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { credentials } from './auth.interface';
 import { UsersRepository } from '../users/users.repository';
@@ -26,7 +23,7 @@ export class AuthRepository {
     if (!isPasswordValid) {
       throw new BadRequestException('Invalid email or password');
     }
-    const payload = { sub: user.id, email: user.email };
+    const payload = { sub: user.id, email: user.email, role: user.role };
     const token = this.jwtService.sign(payload);
     return { message: 'Sign-in successful', token };
   }

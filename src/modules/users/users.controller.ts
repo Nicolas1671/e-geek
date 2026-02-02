@@ -33,6 +33,9 @@ import { Users } from 'src/entities/users.entity';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MinSizeValidationPipe } from 'src/pipes/min-size-validator.pipe';
+import { Roles } from 'src/decorators/roles.decorator';
+import { Role } from '../auth/roles.enum';
+import { RolesGuard } from 'src/guards/roles.guard';
 
 @Controller('users')
 //@UseGuards(AuthGuard) // Apply the AuthGuard to all routes in this controller
@@ -99,6 +102,13 @@ export class UsersController {
   @UsePipes(new ValidationPipe({ transform: true }))
   deleteUser(@Param('id') id: number) {
     return this.usersService.deleteUser(id);
+  }
+
+  @Get('admin')
+  @Roles(Role.User)
+  @UseGuards(AuthGuard, RolesGuard)
+  getAdmin() {
+    return 'Hello Admin';
   }
 
   @HttpCode(200)
