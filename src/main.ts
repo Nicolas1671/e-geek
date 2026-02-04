@@ -4,6 +4,7 @@ import { loggerMiddleware } from './middlewares/logger.middleware';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { auth } from 'express-openid-connect';
 import { config as auth0Config } from './config/auth0';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 //import { DateAdderInterceptor } from './interceptors/date-adder.interceptor';
 //import { AuthGuard } from './guards/auth.guard';
 
@@ -12,6 +13,14 @@ async function bootstrap() {
   //app.useGlobalGuards(new AuthGuard());
   //app.useGlobalInterceptors(new DateAdderInterceptor());
   app.use(auth(auth0Config));
+  const config = new DocumentBuilder()
+    .setTitle('E-Geek API')
+    .setDescription('Documentación de la API de E-Geek')
+    .setVersion('1.0')
+    .addBearerAuth()
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api-docs', app, document);
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
