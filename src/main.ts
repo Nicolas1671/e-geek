@@ -2,6 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { loggerMiddleware } from './middlewares/logger.middleware';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
+import { auth } from 'express-openid-connect';
+import { config as auth0Config } from './config/auth0';
 //import { DateAdderInterceptor } from './interceptors/date-adder.interceptor';
 //import { AuthGuard } from './guards/auth.guard';
 
@@ -9,6 +11,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   //app.useGlobalGuards(new AuthGuard());
   //app.useGlobalInterceptors(new DateAdderInterceptor());
+  app.use(auth(auth0Config));
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

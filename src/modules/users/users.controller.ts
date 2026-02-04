@@ -111,6 +111,12 @@ export class UsersController {
     return 'Hello Admin';
   }
 
+  @Get('auth0/protected')
+  getAuth0Protected(@Req() request: Request) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return JSON.stringify.apply(request.oidc.user);
+  }
+
   @HttpCode(200)
   @Get(':id')
   async getUserById(@Param('id', ParseUUIDPipe) id: string) {

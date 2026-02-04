@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Users } from 'src/entities/users.entity';
 import { CloudinaryConfig } from 'src/config/cloudinary';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { requiresAuth } from 'express-openid-connect';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Users])],
@@ -24,5 +25,6 @@ import { CloudinaryService } from '../cloudinary/cloudinary.service';
 export class UsersModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes('users');
+    consumer.apply(requiresAuth()).forRoutes('users/auth0/protected');
   }
 }
