@@ -16,9 +16,11 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { FilesService } from '../files/files.service';
 import { Files } from 'src/entities/files.entity';
 import { Products } from 'src/entities/products.entity';
+import { ApiTags } from '@nestjs/swagger';
 //import { Express } from 'express';
 //import { Multer } from 'multer';
 
+@ApiTags('products')
 @Controller('products')
 export class ProductsController {
   constructor(

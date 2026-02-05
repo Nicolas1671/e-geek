@@ -36,7 +36,9 @@ import { MinSizeValidationPipe } from 'src/pipes/min-size-validator.pipe';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from '../auth/roles.enum';
 import { RolesGuard } from 'src/guards/roles.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('users') // Add tags to the controller for Swagger documentation
 @Controller('users')
 //@UseGuards(AuthGuard) // Apply the AuthGuard to all routes in this controller
 export class UsersController {
@@ -104,6 +106,7 @@ export class UsersController {
     return this.usersService.deleteUser(id);
   }
 
+  @ApiBearerAuth() //Para que tome el token en Swagger.
   @Get('admin')
   @Roles(Role.User)
   @UseGuards(AuthGuard, RolesGuard)
