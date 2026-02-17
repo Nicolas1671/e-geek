@@ -14,6 +14,8 @@ const config = {
   type: 'postgres',
   database: process.env.DB_NAME,
   host: process.env.DB_HOST,
+  /*Nombre del servicio si estoy en docker-compose, o host.docker.internal si es que estoy localmente. 
+  Si no uso compose, poner el IP del contenedor o el nombre de la Image DB si uso network.*/
   port: Number(process.env.DB_PORT),
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
