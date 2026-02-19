@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  e-geek-app:
+    image: nicolas1671/e-geek:latest
+    ports:
+      - 3001:3000
+    env_file:
+      - .env.development
+    depends_on: 
+      - e-geek-db
+  e-geek-db:
+    image: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    env_file:
+      - .env.development
+
+volumes:
+  pgdata:
+
+
+# ~ docker compose up -d
+# ~ docker compose stop
+# ~ docker compose rm
