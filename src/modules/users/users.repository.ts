@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 //import { User } from './user.interface';
 import { credentials } from '../auth/auth.interface';
 import { DataSource } from 'typeorm';
-import { Users } from 'src/entities/users.entity';
-import { Credentials } from 'src/entities/credentials.entity';
+import { Users } from '../../entities/users.entity';
+import { Credentials } from '../../entities/credentials.entity';
 import { CreateUserDto } from './dtos/CreateUser.dto';
 
 @Injectable()
