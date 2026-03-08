@@ -1,11 +1,11 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
-import { LoggerMiddleware } from 'src/middlewares/logger.middleware';
+import { LoggerMiddleware } from '../../middlewares/logger.middleware';
 import { UsersRepository } from './users.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Users } from 'src/entities/users.entity';
-import { CloudinaryConfig } from 'src/config/cloudinary';
+import { Users } from '../../entities/users.entity';
+import { CloudinaryConfig } from '../../config/cloudinary';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { requiresAuth } from 'express-openid-connect';
 

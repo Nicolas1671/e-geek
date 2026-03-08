@@ -24,18 +24,18 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 //import { User } from './user.interface';
-import { AuthGuard } from 'src/guards/auth.guard';
-import { DateAdderInterceptor } from 'src/interceptors/date-adder.interceptor';
+import { AuthGuard } from '../../guards/auth.guard';
+import { DateAdderInterceptor } from '../../interceptors/date-adder.interceptor';
 import { Request } from 'express';
 import { credentials } from '../auth/auth.interface';
 import { CreateUserDto } from './dtos/CreateUser.dto';
-import { Users } from 'src/entities/users.entity';
+import { Users } from '../../entities/users.entity';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { MinSizeValidationPipe } from 'src/pipes/min-size-validator.pipe';
-import { Roles } from 'src/decorators/roles.decorator';
+import { MinSizeValidationPipe } from '../../pipes/min-size-validator.pipe';
+import { Roles } from '../../decorators/roles.decorator';
 import { Role } from '../auth/roles.enum';
-import { RolesGuard } from 'src/guards/roles.guard';
+import { RolesGuard } from '../../guards/roles.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('users') // Add tags to the controller for Swagger documentation
